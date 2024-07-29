@@ -1,7 +1,7 @@
-from django.db.models.base import Model as Model
+# from django.db.models.base import Model as Model
 from django.db.models import Count
 from django.utils import timezone
-from django.shortcuts import render, get_object_or_404,redirect
+from django.shortcuts import get_object_or_404,redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -48,7 +48,7 @@ class OnlyAuthorOrAdminMixin(UserPassesTestMixin):
     def test_func(self):
         object = self.get_object()
         return (object.author == self.request.user
-                or self.request.user.is_superuser)    
+                or self.request.user.is_superuser)
 
 
 class IndexPostsView(TemplateView):
@@ -76,8 +76,8 @@ class CategoryPostsView(ListView):
     def get_context_data(self, **kwargs):
         cur_category = get_object_or_404(
             Category.objects.all().filter(is_published=True,
-                                          slug=self.kwargs['category_slug'])
-                                          )
+                                          slug=self.kwargs['category_slug']))
+
         # posts = base_query_set(cur_category.posts.all())
         posts = base_query_set()
         posts = posts.filter(category_id=cur_category)
