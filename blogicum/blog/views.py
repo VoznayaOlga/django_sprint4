@@ -1,7 +1,7 @@
 # from django.db.models.base import Model as Model
 from django.db.models import Count
 from django.utils import timezone
-from django.shortcuts import get_object_or_404,redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -58,7 +58,7 @@ class IndexPostsView(TemplateView):
     template_name = 'blog/index.html'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) 
+        context = super().get_context_data(**kwargs)
         posts = base_query_set()
         page_number = self.request.GET.get('page')
         paginator = Paginator(posts, POST_COUNT_LIMIT)
@@ -105,7 +105,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('blog:profile', kwargs={'cur_username': self.request.user.username})
+        return reverse_lazy('blog:profile',
+                            kwargs={'cur_username': self.request.user.username})
 
 
 class PostDetailView(DetailView):
@@ -115,11 +116,12 @@ class PostDetailView(DetailView):
     template_name = 'blog/detail.html'
 
     def get_context_data(self, **kwargs):
-        cur_post = get_object_or_404(Post.objects.all().filter(pk=self.kwargs['pk']))
+        cur_post = get_object_or_404(Post.objects.all().
+                                     filter(pk=self.kwargs['pk']))
         if not cur_post.is_published:
             cur_post = get_object_or_404(Post.objects.all().
-                                       filter(pk=self.kwargs['pk'],
-                                       author=self.request.user))
+                                         filter(pk=self.kwargs['pk'],
+                                                author=self.request.user))
         context = super().get_context_data(**kwargs)
         context['form'] = CommentForm()
         context['comments'] = (self.object.comments.select_related('author').
@@ -140,7 +142,7 @@ class PostUpdateView(UpdateView):
                                      filter(pk=self.kwargs['pk']))
         if not cur_post.author == self.request.user:
             return redirect(reverse_lazy('blog:post_detail',
-                            kwargs={'pk': self.kwargs['pk']})) 
+                            kwargs={'pk': self.kwargs['pk']}))
         form.files = self.request.FILES
         return super().form_valid(form)
 
@@ -156,17 +158,18 @@ class PostDeleteView(OnlyAuthorOrAdminMixin, DeleteView):
     form_class = PostForm
     template_name = 'blog/create.html'
 
-    def get_context_data(self, **kwargs): 
-        context = super().get_context_data(**kwargs) 
-        context['post'] = self.object 
-        return context 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post'] = self.object
+        return context
 
     def get_form(self, form_class=None):
         return form_class(**kwargs)
 
     def get_success_url(self):
         return reverse_lazy('blog:profile',
-                            kwargs={'cur_username': self.request.user.username})
+                            kwargs={'cur_username':
+                                    self.request.user.username})
 
 
 class ProfileListView(ListView):
@@ -240,7 +243,8 @@ class CommentCreateView(BaseCommentView, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        cur_post = get_object_or_404(Post.objects.all().filter(pk=self.kwargs['pk']))
+        cur_post = get_object_or_404(Post.objects.all().
+                                     filter(pk=self.kwargs['pk']))
         form.instance.post = cur_post
         send_mail(
             subject='Добавлен комментарий к вашей публикации.',
