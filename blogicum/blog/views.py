@@ -1,4 +1,3 @@
-# from django.db.models.base import Model as Model
 from django.db.models import Count
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect
@@ -78,7 +77,6 @@ class CategoryPostsView(ListView):
             Category.objects.all().filter(is_published=True,
                                           slug=self.kwargs['category_slug']))
 
-        # posts = base_query_set(cur_category.posts.all())
         posts = base_query_set()
         posts = posts.filter(category_id=cur_category)
         page_number = self.request.GET.get('page')
@@ -106,7 +104,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse_lazy('blog:profile',
-                            kwargs={'cur_username': self.request.user.username})
+                            kwargs={'cur_username':
+                                    self.request.user.username})
 
 
 class PostDetailView(DetailView):
@@ -163,8 +162,8 @@ class PostDeleteView(OnlyAuthorOrAdminMixin, DeleteView):
         context['post'] = self.object
         return context
 
-    def get_form(self, form_class=None):
-        return form_class(**kwargs)
+    # def get_form(self, form_class=None):
+    # return form_class(**kwargs)
 
     def get_success_url(self):
         return reverse_lazy('blog:profile',
@@ -228,8 +227,8 @@ class BaseCommentView(LoginRequiredMixin):
 
     model = Comment
 
-    def get_success_url(self):  
-        return reverse(  
+    def get_success_url(self):
+        return reverse(
             "blog:post_detail",
             kwargs={'pk': self.object.post.pk}
         )
@@ -284,7 +283,7 @@ class CommentDeleteView(OnlyAuthorOrAdminMixin, BaseCommentView, DeleteView):
                                  )
 
     def get_success_url(self):
-        return reverse(  
+        return reverse(
             "blog:post_detail",
             kwargs={'pk': self.kwargs['pk']}
         )

@@ -1,7 +1,7 @@
 from django import forms
 # from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.forms.widgets import DateInput 
+from django.forms.widgets import DateInput
 
 
 from .models import Post, Comment
@@ -18,7 +18,6 @@ class PostForm(forms.ModelForm):
         widgets = {
             'pub_date': DateInput(attrs={'type': 'date'})
         }
-        
 
 
 class ProfileUpdateForm(forms.ModelForm):
