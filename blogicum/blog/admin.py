@@ -1,8 +1,13 @@
 from django.contrib import admin
 
-from .models import Category, Location, Post
+from .models import Category, Location, Post, Comment
 
+class CommentInline(admin.TabularInline):
+    """Комментарий"""
 
+    model = Comment
+    extra = 1
+    
 class PostAdmin(admin.ModelAdmin):
     """Публикации"""
 
@@ -24,6 +29,9 @@ class PostAdmin(admin.ModelAdmin):
         'category',
         'is_published'
     )
+    inlines = (
+        CommentInline,
+    )
     search_fields = ('title',)
     list_filter = ('category', 'location')
     list_display_links = ('title',)
@@ -39,7 +47,7 @@ class PostInline(admin.TabularInline):
 
 class CategoryAdmin(admin.ModelAdmin):
     """Категория"""
-
+    
     inlines = (
         PostInline,
     )
@@ -48,6 +56,12 @@ class CategoryAdmin(admin.ModelAdmin):
     )
 
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = (
+        'text',
+    )
+ 
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Comment, CommentAdmin)
 admin.site.register(Location)
 admin.site.register(Post, PostAdmin)

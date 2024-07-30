@@ -4,23 +4,28 @@ from . import views
 
 app_name = 'blog'
 
-urlpatterns = [
-    path('', views.IndexPostsView.as_view(), name='index'),
-    path('posts/<int:pk>/', views.PostDetailView.as_view(),
+post_urls = [
+    path('<int:post_id>/', views.PostDetailView.as_view(),
          name='post_detail'),
-    path('posts/<int:pk>/edit/', views.PostUpdateView.as_view(),
+    path('<int:post_id>/edit/', views.PostUpdateView.as_view(),
          name='edit_post'),
-    path('posts/<int:pk>/delete/', views.PostDeleteView.as_view(),
+    path('<int:post_id>/delete/', views.PostDeleteView.as_view(),
          name='delete_post'),
-    path('posts/<int:pk>/comment/', views.CommentCreateView.as_view(),
+    path('<int:post_id>/comment/', views.CommentCreateView.as_view(),
          name='add_comment'),
-    path('posts/<int:pk>/edit_comment/<int:comment_id>/',
+    path('<int:post_id>/edit_comment/<int:comment_id>/',
          views.CommentUpdateView.as_view(), name='edit_comment'),
-    path('posts/<int:pk>/delete_comment/<int:comment_id>/',
+    path('<int:post_id>/delete_comment/<int:comment_id>/',
          views.CommentDeleteView.as_view(), name='delete_comment'),
+    path('create/', views.PostCreateView.as_view(), name='create_post'),
+    
+]
+
+urlpatterns = [
+    path('posts/', include(post_urls)),
+    path('', views.IndexPostsView.as_view(), name='index'),
     path('category/<slug:category_slug>/',
          views.CategoryPostsView.as_view(), name='category_posts'),
-    path('posts/create/', views.PostCreateView.as_view(), name='create_post'),
     path('profile/<str:cur_username>/', views.ProfileListView.as_view(),
          name='profile'),
     path('user/edit/', views.ProfileUpdateView.as_view(), name='edit_profile'),

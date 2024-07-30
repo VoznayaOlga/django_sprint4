@@ -110,13 +110,19 @@ class Post(PublishedModel):
 
 class Comment(models.Model):
     """Комментарии к публикациям"""
-
+    
     text = models.TextField('Комментарий')
     post = models.ForeignKey(Post, on_delete=models.CASCADE,
-                             related_name='comments',
-                             )
+                             related_name='comments',)
     created_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               related_name='author')
 
     class Meta:
+        verbose_name = 'комментарий'
+        verbose_name_plural = 'Комментарии'
+        default_related_name = 'author'
         ordering = ('-created_at',)
+
+    def __str__(self):
+        return self.text[:TITLE_MAX_LENGTH]

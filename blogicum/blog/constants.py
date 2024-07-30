@@ -6,6 +6,4 @@ TITLE_MAX_LENGTH = 256
 
 TITLE_MAX_LENGTH_ADMIN = 30
 
-# Количество публикаций на странице
 
-POST_COUNT_LIMIT = 10

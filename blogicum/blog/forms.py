@@ -1,11 +1,10 @@
 from django import forms
-# from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from django.forms.widgets import DateInput
+from django.contrib.auth import get_user_model
+from django.forms.widgets import DateTimeInput
 
 
 from .models import Post, Comment
-# User = get_user_model()
+User = get_user_model()
 
 
 class PostForm(forms.ModelForm):
@@ -14,9 +13,9 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         exclude = ('author',)
-        fields = '__all__'
         widgets = {
-            'pub_date': DateInput(attrs={'type': 'date'})
+            'pub_date': DateTimeInput(attrs={'type': 'datetime-local',
+                                             'class': 'form-control'})
         }
 
 
@@ -26,17 +25,6 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('last_name', 'first_name', 'email', 'username')
-        # exclude = ('password',)
-        # fields = '__all__'
-
-
-class UserUpdateForm(forms.ModelForm):
-    """Форма обновления данных пользователя"""
-
-    class Meta:
-        model = User
-        fields = ('last_name', 'first_name', 'email', 'username')
-        # fields = '__all__'
 
 
 class CommentForm(forms.ModelForm):
