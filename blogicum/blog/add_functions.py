@@ -7,7 +7,6 @@ from .models import Post
 def base_query_set(model_manager=Post.objects, in_published_only=True,
                    add_annotate=True):
     """Базовый запрос"""
-
     queryset = (model_manager.all().
                 select_related('category', 'location', 'author').
                 order_by('-pub_date'))
