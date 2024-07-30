@@ -110,7 +110,7 @@ class Post(PublishedModel):
 
 class Comment(models.Model):
     """Комментарии к публикациям"""
-    
+
     text = models.TextField('Комментарий')
     post = models.ForeignKey(Post, on_delete=models.CASCADE,
                              related_name='comments',)

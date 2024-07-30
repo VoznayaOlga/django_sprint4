@@ -2,12 +2,14 @@ from django.contrib import admin
 
 from .models import Category, Location, Post, Comment
 
+
 class CommentInline(admin.TabularInline):
     """Комментарий"""
 
     model = Comment
     extra = 1
-    
+
+
 class PostAdmin(admin.ModelAdmin):
     """Публикации"""
 
@@ -47,7 +49,7 @@ class PostInline(admin.TabularInline):
 
 class CategoryAdmin(admin.ModelAdmin):
     """Категория"""
-    
+
     inlines = (
         PostInline,
     )
@@ -60,7 +62,8 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = (
         'text',
     )
- 
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Location)

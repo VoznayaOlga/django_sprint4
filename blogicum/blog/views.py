@@ -2,15 +2,10 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
-from django.core.paginator import Paginator
-from django.db.models import Count
 from django.db.models.base import Model as Model
-from django.db.models.query import QuerySet
-from django.http.response import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.utils import timezone
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from blogicum.settings import POST_COUNT_LIMIT
@@ -36,10 +31,11 @@ class OnlyAuthorMixin(UserPassesTestMixin):
     def test_func(self):
         object = self.get_object()
         return object.author == self.request.user
-                
+
 
 class IndexPostsView(ListView):
     """Главная страница"""
+
     template_name = 'blog/index.html'
     paginate_by = POST_COUNT_LIMIT
     queryset = base_query_set()
@@ -119,8 +115,9 @@ class PostUpdateView(OnlyAuthorMixin, UpdateView):
     pk_url_kwarg = 'post_id'
 
     def handle_no_permission(self):
-        return redirect(reverse_lazy('blog:post_detail',
-                                     kwargs={'post_id': self.kwargs['post_id']}))
+        return redirect(
+            reverse_lazy('blog:post_detail',
+                         kwargs={'post_id': self.kwargs['post_id']}))
 
     def get_success_url(self):
         return reverse_lazy('blog:post_detail',
@@ -196,7 +193,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('blog:profile',
                             kwargs={'cur_username':
-                                    self.request.user.username})  
+                                    self.request.user.username})
 
 
 class BaseCommentView(LoginRequiredMixin):
@@ -210,7 +207,7 @@ class BaseCommentView(LoginRequiredMixin):
             "blog:post_detail",
             kwargs={'post_id': self.object.post.pk}
         )
-    
+
     def get_object(self, queryset=None):
         return get_object_or_404(Comment.objects.all().
                                  filter(post=self.kwargs['post_id'],
