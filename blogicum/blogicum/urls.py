@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 
 from django.conf import settings
 
-from . import views
+from pages import views
 
 handler404 = 'pages.views.page_not_found'
 handler500 = 'pages.views.server_error'

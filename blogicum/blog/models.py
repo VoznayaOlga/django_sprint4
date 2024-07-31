@@ -67,9 +67,10 @@ class Post(PublishedModel):
                              max_length=TITLE_MAX_LENGTH)
     text = models.TextField(verbose_name='Текст')
     pub_date = models.DateTimeField(
+        # format="%Y-%m-%d %H:%M",
         verbose_name='Дата и время публикации',
         help_text=('Если установить дату и время в будущем —'
-                   ' можно делать отложенные публикации.')
+                   ' можно делать отложенные публикации.'),
     )
     author = models.ForeignKey(
         User,
@@ -122,7 +123,7 @@ class Comment(models.Model):
         verbose_name = 'комментарий'
         verbose_name_plural = 'Комментарии'
         default_related_name = 'author'
-        ordering = ('-created_at',)
+        ordering = ('created_at',)
 
     def __str__(self):
         return self.text[:TITLE_MAX_LENGTH]
