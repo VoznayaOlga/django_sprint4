@@ -116,7 +116,7 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+
     class Meta:
         verbose_name = 'комментарий'
         verbose_name_plural = 'Комментарии'

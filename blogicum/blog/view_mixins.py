@@ -37,4 +37,3 @@ class BaseCommentMixin(LoginRequiredMixin):
     def get_object(self, queryset=None):
         return get_object_or_404(Comment, post=self.kwargs['post_id'],
                                  pk=self.kwargs['comment_id'])
-
