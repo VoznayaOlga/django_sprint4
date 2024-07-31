@@ -9,6 +9,7 @@ User = get_user_model()
 
 class PostForm(forms.ModelForm):
     """Форма добавления публикации"""
+
     class Meta:
         model = Post
         exclude = ('author',)

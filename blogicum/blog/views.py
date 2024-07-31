@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -34,7 +34,6 @@ class CategoryPostsView(ListView):
 
     def get_category(self):
         """Получить категорию"""
-
         return get_object_or_404(Category, is_published=True,
                                  slug=self.kwargs['category_slug'])
 
@@ -170,7 +169,7 @@ class BaseCommentMixin(LoginRequiredMixin):
     form_class = CommentForm
     template_name = 'blog/comment.html'
     pk_url_kwarg = 'comment_id'
-    
+
     def get_success_url(self):
         return reverse(
             "blog:post_detail",
