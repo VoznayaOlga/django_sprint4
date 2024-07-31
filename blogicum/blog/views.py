@@ -3,14 +3,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from django.conf import settings
 from .query_functions import base_query_set
-from .view_mixins import OnlyAuthorMixin
-from .models import Post, Category, Comment
+from .view_mixins import OnlyAuthorMixin, BaseCommentMixin
+from .models import Post, Category
 from .forms import PostForm, ProfileUpdateForm, CommentForm
 
 UserModel = get_user_model()
@@ -132,7 +132,7 @@ class ProfileListView(ListView):
     def get_queryset(self):
         cur_user = get_object_or_404(UserModel,
                                      username=self.kwargs['cur_username'])
-        in_published_only = False if self.request.user == cur_user else True
+        in_published_only = (self.request.user != cur_user)
         posts = base_query_set(cur_user.posts.all(),
                                in_published_only=in_published_only)
         return posts
@@ -160,25 +160,6 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('blog:profile',
                             kwargs={'cur_username':
                                     self.request.user.username})
-
-
-class BaseCommentMixin(LoginRequiredMixin):
-    """Комментарий"""
-
-    model = Comment
-    form_class = CommentForm
-    template_name = 'blog/comment.html'
-    pk_url_kwarg = 'comment_id'
-
-    def get_success_url(self):
-        return reverse(
-            "blog:post_detail",
-            kwargs={'post_id': self.object.post.pk}
-        )
-
-    def get_object(self, queryset=None):
-        return get_object_or_404(Comment, post=self.kwargs['post_id'],
-                                 pk=self.kwargs['comment_id'])
 
 
 class CommentCreateView(BaseCommentMixin, CreateView):

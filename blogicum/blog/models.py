@@ -113,16 +113,14 @@ class Comment(models.Model):
     """Комментарии к публикациям"""
 
     text = models.TextField('Комментарий')
-    post = models.ForeignKey(Post, on_delete=models.CASCADE,
-                             related_name='comments',)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE,
-                               related_name='author')
-
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    
     class Meta:
         verbose_name = 'комментарий'
         verbose_name_plural = 'Комментарии'
-        default_related_name = 'author'
+        default_related_name = 'comments'
         ordering = ('created_at',)
 
     def __str__(self):
